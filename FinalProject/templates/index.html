@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+{% block title %}Page Title{% endblock %}
+
+{% block content %}
+<form action="/login" method="post">
+    <div class="d-flex justify-content-center">
+        <a href="{{url_for('login')}}"<button class="btn btn-primary" type="submit" style="margin-right: 15px;">Login</button></a>
+
+        <a href="{{url_for('register')}}"<button class="btn btn-primary" type="submit">Register</button></a>
+    </div>
+</form>
+{% endblock %}
+

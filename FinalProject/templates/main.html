@@ -1,0 +1,163 @@
+{% extends 'layout2.html' %}
+
+{% block title %}Flats{% endblock %}
+
+{% block main %}
+    <div class="dropdown">
+        <center>
+            <form action="/search" method="POST">
+                <select name="city" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                    <option value="centre">Centrs</option>
+                    <option value="agenskalns">Agenskalns</option>
+                    <option value="aplokciems">Aplokciems</option>
+                    <option value="bergi">Berģi</option>
+                    <option value="bierini">Bieriņi</option>
+                    <option value="bolderaja">Bolderāja</option>
+                    <option value="breksi">Brekši</option>
+                    <option value="bukulti">Bukulti</option>
+                    <option value="ciekurkalns">Čiekurkalns</option>
+                    <option value="darzciems">Dārzciems</option>
+                    <option value="darzini">Dārziņi</option>
+                    <option value="daugavgriva">Daugavgrīva</option>
+                    <option value="dreilini">Dreiliņi</option>
+                    <option value="dzeguzkalns">Dzegužkalns (Dzirciems)</option>
+                    <option value="grizinkalns">Grīziņkalns</option>
+                    <option value="ilguciems">Iļģuciems</option>
+                    <option value="imanta">Imanta</option>
+                    <option value="janavarti">Jāņavārti</option>
+                    <option value="jaunciems">Jaunciems</option>
+                    <option value="jaunmilgravis">Jaunmīlgrāvis</option>
+                    <option value="jugla">Jugla</option>
+                    <option value="katlakalns">Katlakalns</option>
+                    <option value="kengarags">Ķengarags</option>
+                    <option value="kiburga">Ķiburga</option>
+                    <option value="kipsala">Ķīpsala</option>
+                    <option value="kleisti">Kleisti</option>
+                    <option value="kliversala">Klīversala</option>
+                    <option value="krasta">Krasta r-ns</option>
+                    <option value="kundzinsala">Kundziņsala</option>
+                    <option value="mangali">Mangaļi</option>
+                    <option value="mangalsala">Mangaļsala</option>
+                    <option value="maskavaspriekspilseta">Maskavas priekšpilsēta</option>
+                    <option value="mezaparks">Mežaparks</option>
+                    <option value="mezciems">Mežciems</option>
+                    <option value="ozolciems">Ozolciems</option>
+                    <option value="plavnieki">Pļavnieki</option>
+                    <option value="purvciems">Purvciems</option>
+                    <option value="rumbula">Rumbula</option>
+                    <option value="sampeteris-pleskodale">Šampēteris-Pleskodāle</option>
+                    <option value="sarkandaugava">Sarkandaugava</option>
+                    <option value="skirotava">Šķirotava</option>
+                    <option value="stacija-tirgus">Stacija-Tirgus</option>
+                    <option value="teika">Teika</option>
+                    <option value="tornakalns">Torņakalns</option>
+                    <option value="trisciems">Trīsciems</option>
+                    <option value="vecaki">Vecāķi</option>
+                    <option value="vecmilgravis">Vecmīlgrāvis</option>
+                    <option value="vecriga">Vecrīga</option>
+                    <option value="voleri">Voleri</option>
+                    <option value="zasulauks">Zasulauks</option>
+                    <option value="ziepniekkalns">Ziepniekkalns</option>
+                    <option value="zolitude">Zolitūde</option>
+                    <option value="vef">VEF</option>
+                </select>
+                <button class="btn btn-primary" type="submit" style="margin-right: 15px;" onclick="disableButton()">Search</button>
+            </form>
+        </form>
+
+        <form action="/clear_data" method="POST">
+            <button id="clearButton" class="btn btn-secondary" type="submit" style="margin-right: 15px;">Clear</button>
+        </form>
+    </center>
+    </div>
+    <div id="map" style="height:600px; width:600px; margin-bottom: 100px;"></div>
+    <script>
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 12,
+                streetViewControl: false,
+                mapTypeControl: false,
+                center: {
+                    lat: 56.9677,
+                    lng: 24.1056
+                }
+            });
+            map.setOptions({
+        styles: [
+            {
+                featureType: 'poi',
+                elementType: 'labels',
+                stylers: [
+                    { visibility: 'off' }
+                ]
+            }
+        ]
+    });
+            fetch('/get_street_locations')
+                .then(response => response.json())
+                .then(locations => {
+                    locations.forEach(function(location) {
+                        var customIcon = {
+                            url: '/static/home.png',
+                            scaledSize: new google.maps.Size(30, 30)
+                        };
+
+                        var marker = new google.maps.Marker({
+                            position: {
+                                lat: location.latitude,
+                                lng: location.longitude
+                            },
+                            map: map,
+                            icon: customIcon
+                        });
+
+
+                        var truncatedDescription = location.description.split('City:')[0].trim();
+
+
+                        var contentString = '<div>' +
+                        '<p>' + truncatedDescription + '</p>' +
+                        '<p>URL: <a href="' + location.url + '">' + location.url + '</a></p>';
+
+
+                        var pictureUrls = location.pictures.split(',');
+
+
+                        pictureUrls.forEach(function(pictureUrl) {
+                            contentString += '<a href="' + pictureUrl.trim() + '" data-lightbox="location" data-title="' + truncatedDescription + '">' +
+                            '<img src="' + pictureUrl.trim() + '" alt="Location Picture" style="max-width: 100%; max-height: 100px;">' +
+                            '</a>';
+                        });
+
+                        contentString += '</div>';
+
+                        var infoWindow = new google.maps.InfoWindow({
+                            content: contentString
+                        });
+
+
+                        marker.addListener('click', function() {
+                            infoWindow.open(map, marker);
+                        });
+                    });
+
+                
+                    lightbox.option({
+                        'resizeDuration': 200,
+                        'wrapAround': true
+                    });
+                })
+                .catch(error => console.error("Error fetching locations:", error));
+        }
+    </script>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmYwKurLlvovZuOfJ6pPLXidmf_yjDZzc&callback=initMap">
+    </script>
+    <script>
+        function disableButton() {
+            document.getElementById("searchButton").disabled = true;
+        }
+    </script>
+
+    </div>
+{% endblock %}

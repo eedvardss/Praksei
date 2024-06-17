@@ -1,0 +1,116 @@
+
+    #container {
+      min-height: 100vh;
+      display: flex;
+      position:absolute;
+      width: 100%;
+  }
+
+  .left {
+      width: 60%;
+      background-color: #76ba55;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      flex-direction: column;
+  }
+
+  .left img {
+    justify-content: center;
+    max-width: 10rem;
+}
+  .right {
+    position: relative;
+    width: 40%;
+    background-color: #fcffe4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+
+}
+
+form {
+    width: 80%;
+    max-width: 400px;
+    margin: 20px;
+}
+
+h1 {
+      font-weight: bold;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+}
+
+
+.suggestion {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 2.5em;
+}
+
+nav {
+  background: #76ba55;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+.logo{
+  color:white;
+  font-size: 28px;
+}
+
+ul {
+  text-align: center;
+}
+li {
+  margin-right:60px;
+}
+
+nav ul li{
+  list-style-type: none;
+  display: inline-block;
+}
+nav ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+a, a:hover, a:focus, a:active {
+  text-decoration: none;
+  color: inherit;
+}
+
+h2.logo, ul {
+  box-sizing: border-box;
+}
+
+.dropdown {
+  padding-left: 30%;
+  padding-right: 30%;
+  padding-top: 30px;
+  text-align: center;
+
+}
+
+.middle {
+  text-align: center;
+}
+
+#map {
+  height: 800px;
+  width: 800px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
